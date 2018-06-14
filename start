@@ -1,0 +1,7 @@
+#!/bin/bash
+sleep 5
+cd /home/pi
+sleep 10
+./PunktumFTP.py &
+sleep 5
+./PunktumPlayerOMX.py

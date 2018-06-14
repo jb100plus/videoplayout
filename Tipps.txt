@@ -1,0 +1,100 @@
+sudo apt remove libreoffice-core 
+sudo apt remove kmail
+sudo apt autoremove 
+sudo apt install mc
+sudo apt install openvpn
+sudo apt install sqlite3
+#sudo apt install gnome-session-properties
+sudo apt install ssh
+sudo apt install openvpn
+#sudo apt install pavucontrol
+sudo apt install vlc
+sudo apt install iptables-persistent
+sudo apt install wmctrl
+
+Energieverwaltung und Bilschirmsperre ausschalten
+
+alle Pakete anzeigen
+dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -nr | more
+alle ohne die wichtigen??
+dpkg-query -Wf '${Installed-Size}\t${Package}\t${Priority}\n' | egrep '\s(optional|extra)' | cut -f 1,2 | sort -nr | less
+
+sudo apt remove --purge libreoffice*
+sudo apt purge minecraft-pi
+sudo apt purge scratch
+sudo apt purge wolfram-engine
+sudo apt purge sonic-pi
+sudo apt purge scratch2
+sudo apt purge chromium-browser
+#sudo apt-get remove --purge oracle-java8-jdk openjdk-7-jre oracle-java7-jdk openjdk-8-jre
+sudo apt purge oracle-java8-jdk bluej greenfoot
+sudo apt clean
+sudo apt autoremove
+
+oder gleich eine schlanke Distri einsetzen z.B. 2017-09-07-raspbian-stretch-lite
+dann:
+sudo apt install sqlite3
+sudo apt install omxplayer
+
+das system belegt dann weniger als 2 GB, X braucht man nicht
+
+
+chmod 744 *.py
+chmod 744 start
+Autostart anlegen für das script "start"
+
+sudo nano /etc/default/openvpn 
+Zeile mit AUTOSTART="all" Kommentar entfernen
+Openvpn Configuration und Zertifikate nach /etc/openvpn/ kopieren 
+Konfigurationsdatei umbenennen .ovpn -> conf
+
+auf dem Raspi:  
+sudo systemctl enable openvpn
+
+scp *.py  pi@192.168.1.132:/home/pi/
+scp Punktum*.py punktum@192.168.1.110:/home/punktum/fwsps
+chmod 744 *.py
+ssh 192.168.1.121 -l punktum
+cat /var/log/syslog
+
+Audio
+Einstellungen für Lautstärke->Einstellungen->Profil
+
+sudo iptables -A INPUT -i tun0 -p tcp --dport 22 -j ACCEPT # allow SSH over openvpn
+sudo iptables -A INPUT -p tcp --dport 22 -j DROP # deny all other
+established zulassen ftp!!!
+
+sudo iptables -P INPUT DROP
+sudo iptables -P FORWARD DROP
+sudo iptables -P OUTPUT ACCEPT
+# überflüssig: 
+sudo iptables-save
+sudo netfilter-persistent
+
+sudo iptables -L # list
+sudo iptables -F # flush delete all rules
+
+
+Raspberry:
+für analoge Videoausgabe: in /boot/config.txt
+# uncomment for composite PAL
+sdtv_mode=2
+sdtv_aspect=3
+#overscan_scale=1 wegen oversan, scheint nichts zu bringen
+
+Autostart für Systeme ohne X
+in .bashrc am Ende:
+
+if [ "$SSH_CONNECTION" ]; then
+  cat /home/pi/punktum.log
+else
+  /home/pi/start
+fi
+
+
+lsblk
+sudo dd if=/dev/mmcblk0 of=pi.img bs=10M
+sudo dd of=pi.img if=/dev/mmcblk0 bs=10M
+sync
+
+

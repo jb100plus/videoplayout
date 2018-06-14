@@ -1,0 +1,784 @@
+Benutzung: vlc [Optionen] [Stream] ...
+Sie können mehrere Streams auf der Befehlszeile angeben. Sie werden an die Wiedergabeliste angehängt.
+Das zuerst angegebene Objekt wird zuerst gespielt.
+
+Optionsstile:
+  --Option  Eine globale Option für die gesamte Laufzeit des Programms.
+   -Option  Einbuchstabige Version einer globalen --Option.
+   :Option  Eine Option, die sich nur auf den Stream direkt davor bezieht
+            und vorherige Einstellungen überschreibt.
+
+Stream-MRL-Syntax:
+  [[access][/demux]://]URL[@[Titel][:Kapitel][-[Titel][:Kapitel]]] [:Option=Wert ...]
+
+  Viele der globalen --Optionen können auch als MRL-spezifische :Optionen benutzt werden. Mehrere :Option=Wert-Paare können angegeben werden.
+
+URL-Syntax:
+  [file://]Dateiname             Reine Mediendatei
+  http://IP:Port/Datei           HTTP-URL
+  ftp://IP:Port/Datei            FTP-URL
+  mms://IP:Port/Datei            MMS-URL
+  screen://                      Bildschirmaufnahme
+  [dvd://][Device][@raw_device]  DVD-Gerät/Device
+  [vcd://][Device]               VCD-Gerät/Device
+  [cdda://][Device]              Audio-CD-Gerät/Device
+  udp://[[<quelladresse>]@[<Bind-Adresse>][:<Bind-Port>]]
+                                 UDP-Stream gesendet von einem Streamingserver
+  vlc://pause:<Sekunden>         Spezialobjekt zum Anhalten der Wiedergabe für eine gewisse Zeit
+  vlc://quit                     VLC beenden
+
+ Kernprogramm (core)
+
+ Audio
+      --audio, --no-audio        Audio aktivieren (standardmäßig an)
+      --gain <Fließkommazahl [0,000000 .. 8,000000]> 
+                                 Audioverstärkung
+      --volume-step <Fließkommazahl [1,000000 .. 256,000000]> 
+                                 Abstufung der Audio-Ausgabelautstärke
+      --volume-save, --no-volume-save 
+                                 Die Lautstärke behalten (standardmäßig an)
+      --spdif, --no-spdif        S/PDIF verwenden, wenn verfügbar
+                                 (standardmäßig aus)
+      --force-dolby-surround {0 (Automatisch), 1 (An), 2 (Aus)} 
+                                 Erkennung von Dolby Surround erzwingen
+      --stereo-mode {0 (Nicht gesetzt), 1 (Stereo), 2 (Stereo-Kanäle vertauschen), 3 (Links), 4 (Rechts), 5 (Dolby Surround)} 
+                                 Stereo Audiowiedergabemodus
+      --audio-desync <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Audio-Desynchronisationsausgleich
+      --audio-resampler <Text>   Audioresampler
+      --audio-replay-gain-mode {none,track,album} 
+                                 Verstärkungsmodus
+      --audio-replay-gain-preamp <Fließkommazahl> 
+                                 Vorverstärker
+      --audio-replay-gain-default <Fließkommazahl> 
+                                 Standard-Wiedergabeverstärkung
+      --audio-replay-gain-peak-protection, --no-audio-replay-gain-peak-protection 
+                                 Ausschlag-Schutz (standardmäßig an)
+      --audio-time-stretch, --no-audio-time-stretch 
+                                 Audio-Tonzeitstreckung aktivieren
+                                 (standardmäßig an)
+  -A, --aout <Text>              Audioausgabemodul
+      --audio-filter <Text>      Audiofilter
+      --audio-visual <Text>      Audiovisualisierungen
+
+ Video
+      --video, --no-video        Video aktivieren (standardmäßig an)
+      --grayscale, --no-grayscale 
+                                 Graustufen-Videoausgabe (standardmäßig aus)
+  -f, --fullscreen, --no-fullscreen 
+                                 Vollbildausgabe (standardmäßig aus)
+      --embedded-video, --no-embedded-video 
+                                 Eingebettetes Video (standardmäßig an)
+      --xlib, --no-xlib           (standardmäßig an)
+      --drop-late-frames, --no-drop-late-frames 
+                                 Verspätete Frames auslassen (standardmäßig an)
+      --skip-frames, --no-skip-frames 
+                                 Frames überspringen (standardmäßig an)
+      --quiet-synchro, --no-quiet-synchro 
+                                 Stilles synchronisieren (standardmäßig aus)
+      --keyboard-events, --no-keyboard-events 
+                                 Tastaturereignisse (standardmäßig an)
+      --mouse-events, --no-mouse-events 
+                                 Mausereignisse (standardmäßig an)
+      --overlay, --no-overlay    Videoausgabe überlagern (standardmäßig an)
+      --video-on-top, --no-video-on-top 
+                                 Immer im Vordergrund (standardmäßig aus)
+      --video-wallpaper, --no-video-wallpaper 
+                                 Wallpapermodus aktivieren (standardmäßig aus)
+      --disable-screensaver, --no-disable-screensaver 
+                                 Bildschirmschoner deaktivieren (standardmäßig
+                                 an)
+      --video-title-show, --no-video-title-show 
+                                 Medientitel im Video einblenden (standardmäßig
+                                 an)
+      --video-title-timeout <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Videotitel für x Millisekunden anzeigen
+      --video-title-position {0 (Zentriert), 1 (Links), 2 (Rechts), 4 (Oben), 8 (Unten), 5 (Oben links), 6 (Oben rechts), 9 (Unten links), 10 (Unten rechts)} 
+                                 Position des Videotitels
+      --mouse-hide-timeout <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Mauscursor und Vollbildsteuerung nach x
+                                 Millisekunden ausblenden
+   Schnappschuss:
+      --snapshot-path <Text>     Videoschnappschuss-Verzeichnis (oder
+                                 Dateiname)
+      --snapshot-prefix <Text>   Präfix für Videoschnappschussdateien
+      --snapshot-format {png,jpg,tiff} 
+                                 Videoschnappschuss-Format
+      --snapshot-preview, --no-snapshot-preview 
+                                 Videoschnappschuss-Vorschau anzeigen
+                                 (standardmäßig an)
+      --snapshot-sequential, --no-snapshot-sequential 
+                                 Fortlaufende Nummer anstelle von Zeitstempeln
+                                 verwenden (standardmäßig aus)
+      --snapshot-width <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Breite des Videoschnappschusses
+      --snapshot-height <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Höhe des Videoschnappschusses
+   Fenstereigenschaften:
+      --width <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Videobreite
+      --height <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Videohöhe
+      --video-x <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Video-X-Koordinate
+      --video-y <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Video-Y-Koordinate
+      --crop <Text>              Videobeschneidung
+      --custom-crop-ratios <Text> 
+                                 Angepasste Beschneidungs-Seitenverhältnisliste
+      --aspect-ratio <Text>      Bildseitenverhältnis
+      --autoscale, --no-autoscale 
+                                 Automatische Videoskalierung (standardmäßig
+                                 an)
+      --scale <Fließkommazahl>   Videoskalierungsfilter
+      --monitor-par <Text>       Seitenverhältnis der Monitorpixel
+      --custom-aspect-ratios <Text> 
+                                 Angepasste Liste von Seitenverhältnissen
+      --hdtv-fix, --no-hdtv-fix  HDTV-Höhe korrigieren (standardmäßig an)
+      --video-deco, --no-video-deco 
+                                 Fensterdekorationen (standardmäßig an)
+      --video-title <Text>       Videotitel
+      --align {0 (Zentriert), 1 (Links), 2 (Rechts), 4 (Oben), 8 (Unten), 5 (Oben links), 6 (Oben rechts), 9 (Unten links), 10 (Unten rechts)} 
+                                 Videoausrichtung
+      --zoom <Fließkommazahl>    Video vergrößern
+      --deinterlace {0 (Aus), -1 (Automatisch), 1 (An)} 
+                                 Deinterlace
+      --deinterlace-mode {discard,blend,mean,bob,linear,x,yadif,yadif2x,phosphor,ivtc} 
+                                 Deinterlace-Modus
+  -V, --vout <Text>              Videoausgabemodul
+      --video-filter <Text>      Videofilter-Modul
+      --video-splitter <Text>    Video-Splitter Modul
+
+ Unterbilder
+   On Screen Display:
+      --spu, --no-spu            Unterbilder aktivieren (standardmäßig an)
+      --osd, --no-osd            On Screen Display (standardmäßig an)
+      --text-renderer <Text>     Textrenderer-Modul
+   Untertitel:
+      --sub-file <Text>          Untertiteldatei benutzen
+      --sub-autodetect-file, --no-sub-autodetect-file 
+                                 Untertiteldateien automatisch erkennen
+                                 (standardmäßig an)
+      --sub-autodetect-fuzzy <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Toleranz der automatischen Untertitelsuche
+      --sub-autodetect-path <Text> 
+                                 Pfade der automatischen Untertitelerkennung
+      --sub-margin <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Untertitelposition erzwingen
+   Overlays:
+      --sub-source <Text>        Unterbild-Quellen-Modul
+      --sub-filter <Text>        Unterbilder-Filtermodul
+   Titel-Einstellungen:
+      --program <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Programm
+      --programs <Text>          Programme
+      --audio-track <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Audiospur
+      --sub-track <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Untertitelspur
+      --audio-language <Text>    Audio-Sprache
+      --sub-language <Text>      Untertitelsprache
+      --menu-language <Text>     Menüsprache
+      --audio-track-id <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Audiospur-ID
+      --sub-track-id <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Untertitelspur ID
+      --preferred-resolution {-1 (Bestmögliche), 1080 (Full HD (1080p)), 720 (HD (720p)), 576 (Standardauflösung (576 oder 480 Zeilen/lines)), 360 (Niedrige Auflösung (360 Zeilen/lines)), 240 (Sehr niedrige Auflösung (240 Zeilen/lines))} 
+                                 Bevorzugte Videoauflösung
+   Wiedergabesteuerung:
+      --input-repeat <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Inputwiederholungen
+      --start-time <Fließkommazahl> 
+                                 Startzeit
+      --stop-time <Fließkommazahl> 
+                                 Stoppzeit
+      --run-time <Fließkommazahl> 
+                                 Laufzeit
+      --input-fast-seek, --no-input-fast-seek 
+                                 Schnelles Durchsuchen (standardmäßig aus)
+      --rate <Fließkommazahl>    Wiedergabegeschwindigkeit
+      --input-list <Text>        Input-Liste
+      --input-slave <Text>       Input-Slave (experimentell)
+      --bookmarks <Text>         Lesezeichenliste für einen Stream
+   Standardgeräte:
+      --dvd <Text>               DVD-Gerät
+      --vcd <Text>               VCD-Gerät
+      --cd-audio <Text>          Audio-CD-Gerät
+   Netzwerkeinstellungen:
+      --mtu <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 MTU des Netzwerk-Interfaces
+      --ipv4-timeout <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 TCP-Verbindungs-Time-Out
+      --http-host <Text>         HTTP-Server-Adresse
+      --http-port <Ganzzahl [1 .. 65535]> 
+                                 HTTP-Server-Port
+      --https-port <Ganzzahl [1 .. 65535]> 
+                                 HTTPS-Server-Port
+      --rtsp-host <Text>         RTSP-Server-Adresse
+      --rtsp-port <Ganzzahl [1 .. 65535]> 
+                                 RTSP-Server-Port
+      --http-cert <Text>         HTTP/TLS Server-Zertifikat
+      --http-key <Text>          HTTP/TLS privater Server-Schlüssel
+      --http-ca <Text>           HTTP/TLS Zertifizierungsstelle
+      --http-crl <Text>          HTTP/TLS Zertifikats-Widerrufsliste
+   SOCKS-Proxy:
+      --socks <Text>             SOCKS-Server
+      --socks-user <Text>        SOCKS-Benutzername
+      --socks-pwd <Text>         SOCKS-Passwort
+   Metadaten:
+      --meta-title <Text>        Titel-Metadaten
+      --meta-author <Text>       Autormetadaten
+      --meta-artist <Text>       Künstler-Metadaten
+      --meta-genre <Text>        Genre-Metadaten
+      --meta-copyright <Text>    Urheberrechtsmetadaten
+      --meta-description <Text>  Beschreibungs-Metadaten
+      --meta-date <Text>         Datums-Metadaten
+      --meta-url <Text>          URL-Metadaten
+   Erweitert:
+      --file-caching <Ganzzahl [0 .. 60000]> 
+                                 Datei-Cachewert (ms)
+      --live-caching <Ganzzahl [0 .. 60000]> 
+                                 Cachewert für Liveaufnahmen (ms)
+      --disc-caching <Ganzzahl [0 .. 60000]> 
+                                 Disk-Cachewert (ms)
+      --network-caching <Ganzzahl [0 .. 60000]> 
+                                 Cachewert für das Netzwerk (ms)
+      --cr-average <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Durchschnittlicher Zähler der Uhrreferenz
+      --clock-synchro {-1 (Standard), 0 (Deaktivieren), 1 (Aktivieren)} 
+                                 Uhrsynchronisation
+      --clock-jitter <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Zeitliches Taktzittern
+      --network-synchronisation, --no-network-synchronisation 
+                                 Netzwerksynchronisation (standardmäßig aus)
+      --input-record-path <Text> Aufnahme-Verzeichnis oder Dateiname
+      --input-record-native, --no-input-record-native 
+                                 Bevorzuge native Streamaufnahme (standardmäßig
+                                 an)
+      --input-timeshift-path <Text> 
+                                 Timeshift-Verzeichnis
+      --input-timeshift-granularity <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Timeshift-Granularität
+      --input-title-format <Text> 
+                                 Ändere den Titel laut dem aktuellem Medium
+
+ Decoder
+      --codec <Text>             Liste der bevorzugten Decoder
+      --encoder <Text>           Liste der bevorzugten Encoder
+
+ Input
+      --access <Text>            Zugriffsmodul
+      --demux <Text>             Demux-Modul
+      --stream-filter <Text>     Stream-Filter Modul
+
+ Streamausgabe
+      --sout <Text>              Standard-Streamausgabe-Kette
+      --sout-display, --no-sout-display 
+                                 Während des Streamens anzeigen (standardmäßig
+                                 aus)
+      --sout-keep, --no-sout-keep 
+                                 Streamausgabe offen lassen (standardmäßig aus)
+      --sout-all, --no-sout-all  Streaming von allen ES aktivieren
+                                 (standardmäßig an)
+      --sout-audio, --no-sout-audio 
+                                 Audiostreamausgabe aktivieren (standardmäßig
+                                 an)
+      --sout-video, --no-sout-video 
+                                 Videostreamausgabe aktivieren (standardmäßig
+                                 an)
+      --sout-spu, --no-sout-spu  SPU-Streamausgabe aktivieren (standardmäßig
+                                 an)
+      --sout-mux-caching <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Zwischenspeichern des Muxer bei der
+                                 Streamausgabe (ms)
+   VLM:
+      --vlm-conf <Text>          VLM-Konfigurationsdatei
+      --sap-interval <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 SAP-Ankündigungsintervall
+      --mux <Text>               Mux-Modul
+      --access_output <Text>     Zugriffsausgabemodul
+      --ttl <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Hop limit (TTL)
+      --miface <Text>            Multicast-Ausgabeschnittstelle
+      --dscp <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 DiffServ Behandlungsstufe (DSCP)
+      --packetizer <Text>        Liste der bevorzugten Paketisierer
+
+ Verschiedenes
+   Spezialmodule:
+      --vod-server <Text>        VoD-Server-Modul
+   Module:
+      --plugins-cache, --no-plugins-cache 
+                                 Plugin-Cache benutzen (standardmäßig an)
+   Performanceoptionen:
+      --rt-priority, --no-rt-priority 
+                                 Echtzeitpriorität erlauben (standardmäßig aus)
+      --rt-offset <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Priorität von VLC anpassen
+      --inhibit, --no-inhibit    Powermanagement-Daemon für die Dauer der
+                                 Wiedergabe unterbrechen (standardmäßig an)
+
+ Wiedergabeliste
+  -Z, --random, --no-random      Dateien immer in zufälliger Reihenfolge
+                                 abspielen (standardmäßig aus)
+  -L, --loop, --no-loop          Alle wiederholen (standardmäßig aus)
+  -R, --repeat, --no-repeat      Aktuelles Objekt wiederholen (standardmäßig
+                                 aus)
+      --play-and-exit, --no-play-and-exit 
+                                 Abspielen und beenden (standardmäßig aus)
+      --play-and-stop, --no-play-and-stop 
+                                 Abspielen und stoppen (standardmäßig aus)
+      --play-and-pause, --no-play-and-pause 
+                                 Abspielen und Pause (standardmäßig aus)
+      --playlist-autostart, --no-playlist-autostart 
+                                 Autostart (standardmäßig an)
+      --playlist-cork, --no-playlist-cork 
+                                 Bei Audiokommunikation anhalten (standardmäßig
+                                 an)
+      --one-instance, --no-one-instance 
+                                 Nur eine laufende Instanz erlauben
+                                 (standardmäßig aus)
+      --started-from-file, --no-started-from-file 
+                                 VLC wird mittels einer Dateizuordnung
+                                 gestartet. (standardmäßig aus)
+      --one-instance-when-started-from-file, --no-one-instance-when-started-from-file 
+                                 Nur eine Instanz benutzen, wenn aus der
+                                 Dateiverwaltung gestartet wurde (standardmäßig
+                                 an)
+      --playlist-enqueue, --no-playlist-enqueue 
+                                 Titel in die Wiedergabeliste einreihen, wenn
+                                 nur eine Instanz gestartet werden darf
+                                 (standardmäßig aus)
+      --media-library, --no-media-library 
+                                 Medienbibliothek benutzen (standardmäßig aus)
+      --playlist-tree, --no-playlist-tree 
+                                 Wiedergabelistenbaum anzeigen (standardmäßig
+                                 aus)
+      --open <Text>              Standardstream
+      --auto-preparse, --no-auto-preparse 
+                                 Automatisch Titelinformation von Dateien laden
+                                 (standardmäßig an)
+      --metadata-network-access, --no-metadata-network-access 
+                                 Netzwerkzugriff auf die Metadaten erlauben
+                                 (standardmäßig an)
+  -S, --services-discovery <Text> 
+                                 Diensterkennungsmodule
+  -v, --verbose <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Verbose-Level (0,1,2)
+  -q, --quiet, --no-quiet        Ruhig sein (standardmäßig aus)
+  -d, --daemon, --no-daemon      Als Daemon-Prozess laufen (standardmäßig aus)
+      --pidfile <Text>           Prozess-ID in Datei schreiben
+      --file-logging, --no-file-logging 
+                                 Protokoll in Datei schreiben (standardmäßig
+                                 aus)
+      --syslog, --no-syslog      Meldungen in das Systemlogbuch (standardmäßig
+                                 aus)
+      --color, --no-color        Farbige Meldungen (standardmäßig an)
+      --advanced, --no-advanced  Erweiterte Optionen anzeigen (standardmäßig
+                                 aus)
+      --interact, --no-interact  Interface-Interaktionen (standardmäßig an)
+      --stats, --no-stats        Lokale Statistiken sammeln (standardmäßig an)
+  -I, --intf <Text>              Interface-Modul
+      --extraintf <Text>         Extra Interface-Module
+      --control <Text>           Steuerinterfaces
+
+ Hotkeys
+      --hotkeys-mousewheel-mode {2 (Ignorieren), 0 (Lautstärkensteuerung), 1 (Positionssteuerung)} 
+                                 Steuerung über Mausrad-X-Achse
+      --global-key-toggle-fullscreen <Text> 
+                                 Vollbild
+      --key-toggle-fullscreen <Text> 
+                                 Vollbild
+      --global-key-leave-fullscreen <Text> 
+                                 Vollbild beenden
+      --key-leave-fullscreen <Text> 
+                                 Vollbild beenden
+      --global-key-play-pause <Text> 
+                                 Abspielen/Pause
+      --key-play-pause <Text>    Abspielen/Pause
+      --global-key-pause <Text>  Nur Pause
+      --key-pause <Text>         Nur Pause
+      --global-key-play <Text>   Nur Abspielen
+      --key-play <Text>          Nur Abspielen
+      --global-key-faster <Text> Schneller
+      --key-faster <Text>        Schneller
+      --global-key-slower <Text> Langsamer
+      --key-slower <Text>        Langsamer
+      --global-key-rate-normal <Text> 
+                                 Normale Rate
+      --key-rate-normal <Text>   Normale Rate
+      --global-key-rate-faster-fine <Text> 
+                                 Schneller (fein)
+      --key-rate-faster-fine <Text> 
+                                 Schneller (fein)
+      --global-key-rate-slower-fine <Text> 
+                                 Langsamer (fein)
+      --key-rate-slower-fine <Text> 
+                                 Langsamer (fein)
+      --global-key-next <Text>   Nächstes
+      --key-next <Text>          Nächstes
+      --global-key-prev <Text>   Vorheriges
+      --key-prev <Text>          Vorheriges
+      --global-key-stop <Text>   Stopp
+      --key-stop <Text>          Stopp
+      --global-key-position <Text> 
+                                 Position
+      --key-position <Text>      Position
+      --global-key-jump-extrashort <Text> 
+                                 Sehr kurzer Sprung zurück
+      --key-jump-extrashort <Text> 
+                                 Sehr kurzer Sprung zurück
+      --global-key-jump+extrashort <Text> 
+                                 Sehr kurzer Sprung vorwärts
+      --key-jump+extrashort <Text> 
+                                 Sehr kurzer Sprung vorwärts
+      --global-key-jump-short <Text> 
+                                 Kurzer Sprung zurück
+      --key-jump-short <Text>    Kurzer Sprung zurück
+      --global-key-jump+short <Text> 
+                                 Kurzer Sprung vorwärts
+      --key-jump+short <Text>    Kurzer Sprung vorwärts
+      --global-key-jump-medium <Text> 
+                                 Sprung zurück
+      --key-jump-medium <Text>   Sprung zurück
+      --global-key-jump+medium <Text> 
+                                 Sprung vorwärts
+      --key-jump+medium <Text>   Sprung vorwärts
+      --global-key-jump-long <Text> 
+                                 Langer Sprung zurück
+      --key-jump-long <Text>     Langer Sprung zurück
+      --global-key-jump+long <Text> 
+                                 Langer Sprung vorwärts
+      --key-jump+long <Text>     Langer Sprung vorwärts
+      --global-key-frame-next <Text> 
+                                 Nächstes Bild
+      --key-frame-next <Text>    Nächstes Bild
+      --global-key-nav-activate <Text> 
+                                 Aktivieren
+      --key-nav-activate <Text>  Aktivieren
+      --global-key-nav-up <Text> Nach oben bewegen
+      --key-nav-up <Text>        Nach oben bewegen
+      --global-key-nav-down <Text> 
+                                 Nach unten bewegen
+      --key-nav-down <Text>      Nach unten bewegen
+      --global-key-nav-left <Text> 
+                                 Nach links bewegen
+      --key-nav-left <Text>      Nach links bewegen
+      --global-key-nav-right <Text> 
+                                 Nach rechts bewegen
+      --key-nav-right <Text>     Nach rechts bewegen
+      --global-key-disc-menu <Text> 
+                                 Zum DVD-Menü gehen
+      --key-disc-menu <Text>     Zum DVD-Menü gehen
+      --global-key-title-prev <Text> 
+                                 Vorherigen DVD-Titel auswählen
+      --key-title-prev <Text>    Vorherigen DVD-Titel auswählen
+      --global-key-title-next <Text> 
+                                 Den nächsten DVD-Titel wählen
+      --key-title-next <Text>    Den nächsten DVD-Titel wählen
+      --global-key-chapter-prev <Text> 
+                                 Vorheriges DVD-Kapitel auswählen
+      --key-chapter-prev <Text>  Vorheriges DVD-Kapitel auswählen
+      --global-key-chapter-next <Text> 
+                                 Nächstes DVD-Kapitel auswählen
+      --key-chapter-next <Text>  Nächstes DVD-Kapitel auswählen
+      --global-key-quit <Text>   Beenden
+      --key-quit <Text>          Beenden
+      --global-key-vol-up <Text> Lauter
+      --key-vol-up <Text>        Lauter
+      --global-key-vol-down <Text> 
+                                 Leiser
+      --key-vol-down <Text>      Leiser
+      --global-key-vol-mute <Text> 
+                                 Ton aus
+      --key-vol-mute <Text>      Ton aus
+      --global-key-subdelay-up <Text> 
+                                 Untertitelverzögerung erhöhen
+      --key-subdelay-up <Text>   Untertitelverzögerung erhöhen
+      --global-key-subdelay-down <Text> 
+                                 Untertitelverzögerung verringern
+      --key-subdelay-down <Text> Untertitelverzögerung verringern
+      --global-key-subsync-markaudio <Text> 
+                                 Untertitel synchronisieren / Audio-Zeitstempel
+                                 als Lesezeichen speichern
+      --key-subsync-markaudio <Text> 
+                                 Untertitel synchronisieren / Audio-Zeitstempel
+                                 als Lesezeichen speichern
+      --global-key-subsync-marksub <Text> 
+                                 Untertitel synchronisieren /
+                                 Untertitel-Zeitstempel als Lesezeichen
+                                 speichern
+      --key-subsync-marksub <Text> 
+                                 Untertitel synchronisieren /
+                                 Untertitel-Zeitstempel als Lesezeichen
+                                 speichern
+      --global-key-subsync-apply <Text> 
+                                 Untertitel Synchronisation / synchronisiere
+                                 Audio- und Untertitel-Zeitstempel
+      --key-subsync-apply <Text> Untertitel Synchronisation / synchronisiere
+                                 Audio- und Untertitel-Zeitstempel
+      --global-key-subsync-reset <Text> 
+                                 Untertitel Synchronisation / setze die Audio-
+                                 und Untertitel-Synchronisation zurück
+      --key-subsync-reset <Text> Untertitel Synchronisation / setze die Audio-
+                                 und Untertitel-Synchronisation zurück
+      --global-key-subpos-up <Text> 
+                                 Untertitel Position oben
+      --key-subpos-up <Text>     Untertitel Position oben
+      --global-key-subpos-down <Text> 
+                                 Untertitel Position unten
+      --key-subpos-down <Text>   Untertitel Position unten
+      --global-key-audiodelay-up <Text> 
+                                 Audioverzögerung erhöhen
+      --key-audiodelay-up <Text> Audioverzögerung erhöhen
+      --global-key-audiodelay-down <Text> 
+                                 Audioverzögerung verringern
+      --key-audiodelay-down <Text> 
+                                 Audioverzögerung verringern
+      --global-key-audio-track <Text> 
+                                 Audiospur wechseln
+      --key-audio-track <Text>   Audiospur wechseln
+      --global-key-audiodevice-cycle <Text> 
+                                 Durch verschiedene Audiogeräte wechseln
+      --key-audiodevice-cycle <Text> 
+                                 Durch verschiedene Audiogeräte wechseln
+      --global-key-subtitle-track <Text> 
+                                 Untertitelspur wechseln
+      --key-subtitle-track <Text> 
+                                 Untertitelspur wechseln
+      --global-key-subtitle-toggle <Text> 
+                                 Untertitel umschalten
+      --key-subtitle-toggle <Text> 
+                                 Untertitel umschalten
+      --global-key-program-sid-next <Text> 
+                                 Nächste Programm-SID wechseln
+      --key-program-sid-next <Text> 
+                                 Nächste Programm-SID wechseln
+      --global-key-program-sid-prev <Text> 
+                                 Vorherige Programm-SID wechseln
+      --key-program-sid-prev <Text> 
+                                 Vorherige Programm-SID wechseln
+      --global-key-aspect-ratio <Text> 
+                                 Durch die verfügbaren Bildseitenverhältnisse
+                                 wechseln
+      --key-aspect-ratio <Text>  Durch die verfügbaren Bildseitenverhältnisse
+                                 wechseln
+      --global-key-crop <Text>   Durch verschiedene Videobeschneidungsformate
+                                 wechseln
+      --key-crop <Text>          Durch verschiedene Videobeschneidungsformate
+                                 wechseln
+      --global-key-toggle-autoscale <Text> 
+                                 Automatische Skalierung an/aus
+      --key-toggle-autoscale <Text> 
+                                 Automatische Skalierung an/aus
+      --global-key-incr-scalefactor <Text> 
+                                 Skalierungsfaktor erhöhen
+      --key-incr-scalefactor <Text> 
+                                 Skalierungsfaktor erhöhen
+      --global-key-decr-scalefactor <Text> 
+                                 Skalierungsfaktor verringern
+      --key-decr-scalefactor <Text> 
+                                 Skalierungsfaktor verringern
+      --global-key-deinterlace <Text> 
+                                 Deinterlacing an-/ausschalten
+      --key-deinterlace <Text>   Deinterlacing an-/ausschalten
+      --global-key-deinterlace-mode <Text> 
+                                 Durch Deinterlace-Modi wechseln
+      --key-deinterlace-mode <Text> 
+                                 Durch Deinterlace-Modi wechseln
+      --global-key-intf-show <Text> 
+                                 Steuerung im Vollbildmodus anzeigen
+      --key-intf-show <Text>     Steuerung im Vollbildmodus anzeigen
+      --global-key-intf-boss <Text> 
+                                 Boss-Taste
+      --key-intf-boss <Text>     Boss-Taste
+      --global-key-intf-popup-menu <Text> 
+                                 Kontextmenü
+      --key-intf-popup-menu <Text> 
+                                 Kontextmenü
+      --global-key-snapshot <Text> 
+                                 Videoschnappschuss machen
+      --key-snapshot <Text>      Videoschnappschuss machen
+      --global-key-record <Text> Aufnehmen
+      --key-record <Text>        Aufnehmen
+      --global-key-zoom <Text>   Zoomen
+      --key-zoom <Text>          Zoomen
+      --global-key-unzoom <Text> Herauszoomen
+      --key-unzoom <Text>        Herauszoomen
+      --global-key-wallpaper <Text> 
+                                 Hintergrundbild-Modus der Videoausgabe
+                                 wechseln
+      --key-wallpaper <Text>     Hintergrundbild-Modus der Videoausgabe
+                                 wechseln
+      --global-key-crop-top <Text> 
+                                 Ein Pixel vom oberen Bildrand abschneiden
+      --key-crop-top <Text>      Ein Pixel vom oberen Bildrand abschneiden
+      --global-key-uncrop-top <Text> 
+                                 Ein Pixel vom oberen Bildrand mehr zeigen
+      --key-uncrop-top <Text>    Ein Pixel vom oberen Bildrand mehr zeigen
+      --global-key-crop-left <Text> 
+                                 Ein Pixel vom linken Bildrand abschneiden
+      --key-crop-left <Text>     Ein Pixel vom linken Bildrand abschneiden
+      --global-key-uncrop-left <Text> 
+                                 Ein Pixel vom linken Bildrand mehr zeigen
+      --key-uncrop-left <Text>   Ein Pixel vom linken Bildrand mehr zeigen
+      --global-key-crop-bottom <Text> 
+                                 Ein Pixel vom unteren Bildrand abschneiden
+      --key-crop-bottom <Text>   Ein Pixel vom unteren Bildrand abschneiden
+      --global-key-uncrop-bottom <Text> 
+                                 Ein Pixel vom unteren Bildrand mehr zeigen
+      --key-uncrop-bottom <Text> Ein Pixel vom unteren Bildrand mehr zeigen
+      --global-key-crop-right <Text> 
+                                 Ein Pixel vom rechten Bildrand abschneiden
+      --key-crop-right <Text>    Ein Pixel vom rechten Bildrand abschneiden
+      --global-key-uncrop-right <Text> 
+                                 Ein Pixel vom rechten Bildrand mehr zeigen
+      --key-uncrop-right <Text>  Ein Pixel vom rechten Bildrand mehr zeigen
+      --global-key-random <Text> Zufällig
+      --key-random <Text>        Zufällig
+      --global-key-loop <Text>   Normal/Schleife/Wiederholen
+      --key-loop <Text>          Normal/Schleife/Wiederholen
+   Zoomen:
+      --global-key-zoom-quarter <Text> 
+                                 1:4 Viertel
+      --key-zoom-quarter <Text>  1:4 Viertel
+      --global-key-zoom-half <Text> 
+                                 1:2 Halb
+      --key-zoom-half <Text>     1:2 Halb
+      --global-key-zoom-original <Text> 
+                                 1:1 Original
+      --key-zoom-original <Text> 1:1 Original
+      --global-key-zoom-double <Text> 
+                                 2:1 Doppelt
+      --key-zoom-double <Text>   2:1 Doppelt
+   Sprunggrößen:
+      --extrashort-jump-size <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 'Sehr kurz vorspulen'-Länge
+      --short-jump-size <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 'Kurz vorspulen'-Länge
+      --medium-jump-size <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 'Vorspulen'-Länge
+      --long-jump-size <Ganzzahl [-2147483648 .. 2147483647]> 
+                                 Länge des langen Sprungs
+      --global-key-set-bookmark1 <Text> 
+                                 Wiedergabelistenlesezeichen 1 festlegen
+      --key-set-bookmark1 <Text> Wiedergabelistenlesezeichen 1 festlegen
+      --global-key-set-bookmark2 <Text> 
+                                 Wiedergabelistenlesezeichen 2 festlegen
+      --key-set-bookmark2 <Text> Wiedergabelistenlesezeichen 2 festlegen
+      --global-key-set-bookmark3 <Text> 
+                                 Wiedergabelistenlesezeichen 3 festlegen
+      --key-set-bookmark3 <Text> Wiedergabelistenlesezeichen 3 festlegen
+      --global-key-set-bookmark4 <Text> 
+                                 Wiedergabelistenlesezeichen 4 festlegen
+      --key-set-bookmark4 <Text> Wiedergabelistenlesezeichen 4 festlegen
+      --global-key-set-bookmark5 <Text> 
+                                 Wiedergabelistenlesezeichen 5 festlegen
+      --key-set-bookmark5 <Text> Wiedergabelistenlesezeichen 5 festlegen
+      --global-key-set-bookmark6 <Text> 
+                                 Wiedergabelistenlesezeichen 6 festlegen
+      --key-set-bookmark6 <Text> Wiedergabelistenlesezeichen 6 festlegen
+      --global-key-set-bookmark7 <Text> 
+                                 Wiedergabelistenlesezeichen 7 festlegen
+      --key-set-bookmark7 <Text> Wiedergabelistenlesezeichen 7 festlegen
+      --global-key-set-bookmark8 <Text> 
+                                 Wiedergabelistenlesezeichen 8 festlegen
+      --key-set-bookmark8 <Text> Wiedergabelistenlesezeichen 8 festlegen
+      --global-key-set-bookmark9 <Text> 
+                                 Wiedergabelistenlesezeichen 9 festlegen
+      --key-set-bookmark9 <Text> Wiedergabelistenlesezeichen 9 festlegen
+      --global-key-set-bookmark10 <Text> 
+                                 Wiedergabelistenlesezeichen 10 festlegen
+      --key-set-bookmark10 <Text> 
+                                 Wiedergabelistenlesezeichen 10 festlegen
+      --global-key-play-bookmark1 <Text> 
+                                 Wiedergabelistenlesezeichen 1 abspielen
+      --key-play-bookmark1 <Text> 
+                                 Wiedergabelistenlesezeichen 1 abspielen
+      --global-key-play-bookmark2 <Text> 
+                                 Wiedergabelistenlesezeichen 2 abspielen
+      --key-play-bookmark2 <Text> 
+                                 Wiedergabelistenlesezeichen 2 abspielen
+      --global-key-play-bookmark3 <Text> 
+                                 Wiedergabelistenlesezeichen 3 abspielen
+      --key-play-bookmark3 <Text> 
+                                 Wiedergabelistenlesezeichen 3 abspielen
+      --global-key-play-bookmark4 <Text> 
+                                 Wiedergabelistenlesezeichen 4 abspielen
+      --key-play-bookmark4 <Text> 
+                                 Wiedergabelistenlesezeichen 4 abspielen
+      --global-key-play-bookmark5 <Text> 
+                                 Wiedergabelistenlesezeichen 5 abspielen
+      --key-play-bookmark5 <Text> 
+                                 Wiedergabelistenlesezeichen 5 abspielen
+      --global-key-play-bookmark6 <Text> 
+                                 Wiedergabelistenlesezeichen 6 abspielen
+      --key-play-bookmark6 <Text> 
+                                 Wiedergabelistenlesezeichen 6 abspielen
+      --global-key-play-bookmark7 <Text> 
+                                 Wiedergabelistenlesezeichen 7 abspielen
+      --key-play-bookmark7 <Text> 
+                                 Wiedergabelistenlesezeichen 7 abspielen
+      --global-key-play-bookmark8 <Text> 
+                                 Wiedergabelistenlesezeichen 8 abspielen
+      --key-play-bookmark8 <Text> 
+                                 Wiedergabelistenlesezeichen 8 abspielen
+      --global-key-play-bookmark9 <Text> 
+                                 Wiedergabelistenlesezeichen 9 abspielen
+      --key-play-bookmark9 <Text> 
+                                 Wiedergabelistenlesezeichen 9 abspielen
+      --global-key-play-bookmark10 <Text> 
+                                 Wiedergabelistenlesezeichen 10 abspielen
+      --key-play-bookmark10 <Text> 
+                                 Wiedergabelistenlesezeichen 10 abspielen
+      --global-key-clear-playlist <Text> 
+                                 Wiedergabeliste löschen
+      --key-clear-playlist <Text> 
+                                 Wiedergabeliste löschen
+      --bookmark1 <Text>         Wiedergabelisten-Lesezeichen 1
+      --bookmark2 <Text>         Wiedergabelisten-Lesezeichen 2
+      --bookmark3 <Text>         Wiedergabelisten-Lesezeichen 3
+      --bookmark4 <Text>         Wiedergabelisten-Lesezeichen 4
+      --bookmark5 <Text>         Wiedergabelisten-Lesezeichen 5
+      --bookmark6 <Text>         Wiedergabelisten-Lesezeichen 6
+      --bookmark7 <Text>         Wiedergabelisten-Lesezeichen 7
+      --bookmark8 <Text>         Wiedergabelisten-Lesezeichen 8
+      --bookmark9 <Text>         Wiedergabelisten-Lesezeichen 9
+      --bookmark10 <Text>        Wiedergabelisten-Lesezeichen 10
+  -h, --help, --no-help          Hilfe für VLC ausgeben (kann mit --advanced
+                                 und --help-verbose kombiniert werden)
+                                 (standardmäßig aus)
+  -H, --full-help, --no-full-help 
+                                 Ausführliche Hilfe für VLC und dessen Module
+                                 (standardmäßig aus)
+      --longhelp, --no-longhelp  Hilfe für VLC und alle Module ausgeben (kann
+                                 mit --advanced und --help-verbose kombiniert
+                                 werden). (standardmäßig aus)
+      --help-verbose, --no-help-verbose 
+                                 Nach besonderer Ausführlichkeit fragen, wenn
+                                 Hilfe angezeigt wird (standardmäßig aus)
+  -l, --list, --no-list          Liste aller verfügbaren Module ausgeben
+                                 (standardmäßig aus)
+      --list-verbose, --no-list-verbose 
+                                 Liste aller verfügbaren Module mit
+                                 zusätzlichen Details ausgeben (standardmäßig
+                                 aus)
+  -p, --module <Text>            Hilfe zu einem bestimmten Modul ausgeben (kann
+                                 mit --advanced und --help-verbose kombiniert
+                                 werden). Für genaue Übereinstimmung ein =
+                                 voranstellen.
+      --ignore-config, --no-ignore-config 
+                                 Keine Konfigurationsoption wird geladen oder
+                                 in der Einstellungsdatei gespeichert
+                                 (standardmäßig an)
+      --reset-config, --no-reset-config 
+                                 Die aktuellen Einstellungen auf die
+                                 Standardwerte zurücksetzen (standardmäßig aus)
+      --reset-plugins-cache, --no-reset-plugins-cache 
+                                 Zurücksetzen des aktuellen Plugin-Caches
+                                 (standardmäßig aus)
+      --version, --no-version    Versionsinformationen ausgeben (standardmäßig
+                                 aus)
+      --config <Text>            Alternative Einstellungsdatei benutzen
+
+Um ausführliche Hilfe zu bekommen, benutzen Sie '-H'.
