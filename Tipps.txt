@@ -1,37 +1,4 @@
-sudo apt remove libreoffice-core 
-sudo apt remove kmail
-sudo apt autoremove 
-sudo apt install mc
-sudo apt install openvpn
-sudo apt install sqlite3
-#sudo apt install gnome-session-properties
-sudo apt install ssh
-sudo apt install openvpn
-#sudo apt install pavucontrol
-sudo apt install vlc
-sudo apt install iptables-persistent
-sudo apt install wmctrl
-
-Energieverwaltung und Bilschirmsperre ausschalten
-
-alle Pakete anzeigen
-dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -nr | more
-alle ohne die wichtigen??
-dpkg-query -Wf '${Installed-Size}\t${Package}\t${Priority}\n' | egrep '\s(optional|extra)' | cut -f 1,2 | sort -nr | less
-
-sudo apt remove --purge libreoffice*
-sudo apt purge minecraft-pi
-sudo apt purge scratch
-sudo apt purge wolfram-engine
-sudo apt purge sonic-pi
-sudo apt purge scratch2
-sudo apt purge chromium-browser
-#sudo apt-get remove --purge oracle-java8-jdk openjdk-7-jre oracle-java7-jdk openjdk-8-jre
-sudo apt purge oracle-java8-jdk bluej greenfoot
-sudo apt clean
-sudo apt autoremove
-
-oder gleich eine schlanke Distri einsetzen z.B. 2017-09-07-raspbian-stretch-lite
+schlanke Distri einsetzen z.B. 2017-09-07-raspbian-stretch-lite
 dann:
 sudo apt install sqlite3
 sudo apt install omxplayer
