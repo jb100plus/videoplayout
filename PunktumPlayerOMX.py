@@ -1,13 +1,6 @@
 #!/usr/bin/python3
-import datetime
-import os
-import sqlite3
-import time
-import telnetlib
-import logging
-from logging.handlers import RotatingFileHandler
-import signal
 import subprocess
+
 from PunktumPlayer import PunktumPlayer
 
 

@@ -23,7 +23,7 @@ class PunktumFiles:
     def getFilesNeeded(self) -> dict:
         filesNeeded = {}
         start = 0
-        for t in self.relativeTage:
+        for _ in self.relativeTage:
             date = datetime.datetime.today() - datetime.timedelta(days=-start + 1) - datetime.timedelta(hours=17)
             # date = datetime.now() - datetime.timedelta(days=1)
             wt = date.weekday()
@@ -34,17 +34,6 @@ class PunktumFiles:
             start += 1
         return filesNeeded
 
-    def isFileAvailable(self, filename):
-        rval = False
-        conn = sqlite3.connect('fwsps.db')
-        c = conn.cursor()
-        fn = (filename,)
-        c.execute("SELECT complete FROM clips WHERE filename = ?", fn)
-        for row in c:
-            ic = row[0]
-            rval = (ic.upper() == "TRUE")
-            break
-        return rval
 
     def deleteFile(self, filename):
         dictFn = self.getFilesNeeded()
@@ -100,7 +89,7 @@ class PunktumFiles:
             # be sure any changes have been committed or they will be lost.
             conn.commit()
             conn.close()
-            rval = True;
+            rval = True
             self.logger.info('DB created')
         return rval
 

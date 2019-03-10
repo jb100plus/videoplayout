@@ -24,7 +24,7 @@ class PunktumPlayerVLC(PunktumPlayer):
         HOST = "127.0.0.1"
         PORT = 4444
         tn = telnetlib.Telnet(HOST, PORT)
-        data = tn.read_until((">").encode('ascii'), 1)
+        data = tn.read_until(">".encode('ascii'), 1)
         data = tn.read_eager()
         while True:
             data = tn.read_eager()
@@ -33,7 +33,7 @@ class PunktumPlayerVLC(PunktumPlayer):
                 break
         seekstr = "seek " + str(sec) + "\n"
         tn.write(seekstr.encode('ascii'))
-        data = tn.read_until((">").encode('ascii'), 1)
+        data = tn.read_until(">".encode('ascii'), 1)
         print(str(data, 'utf-8'))
         while True:
             data = tn.read_eager()
@@ -50,14 +50,14 @@ class PunktumPlayerVLC(PunktumPlayer):
         HOST = "127.0.0.1"
         PORT = 4444
         tn = telnetlib.Telnet(HOST, PORT)
-        data = tn.read_until((">").encode('ascii'), 1)
+        data = tn.read_until(">".encode('ascii'), 1)
         data = tn.read_eager()
         while True:
             data = tn.read_eager()
             if len(data) == 0:
                 break
-        tn.write(("status\n").encode('ascii'))
-        data = tn.read_until((">").encode('ascii'), 1)
+        tn.write("status\n".encode('ascii'))
+        data = tn.read_until(">".encode('ascii'), 1)
         datastr = str(data, 'utf-8')
         self.pf.logger.debug(datastr)
         # sudo apt install wmctrl

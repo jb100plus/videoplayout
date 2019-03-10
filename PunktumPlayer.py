@@ -30,7 +30,6 @@ class PunktumPlayer:
                 if not self.pf.isFileAvailable(fn):
                     fn = dictFn["gestern"]
                     self.pf.logger.info("clip %s not available trying %s" % (dictFn["heute"], dictFn["gestern"]))
-                existingFileSize = 0
                 file_name = fn
                 ct = datetime.datetime.now()
                 # restart every hour, otherwise the clip start at the offset from the first start
@@ -47,9 +46,8 @@ class PunktumPlayer:
                         # falls die Sendung nur 58 min lang ist
                         self.offset = min([58 * 60, self.offset])
                         self.play(currentFile)
-                if self.checkPlayerStatus() == False:
+                if not self.checkPlayerStatus():
                     currentFile = ""
             except Exception as e:
                 self.pf.logger.error("fatal error %s" % e)
             time.sleep(60 - datetime.datetime.now().second)
-        self.pf.logger.critical("-----upps playing done ???-----")

@@ -6,6 +6,7 @@ import os
 import random
 import re
 import time
+import secrets
 
 from PunktumFiles import PunktumFiles
 
@@ -54,21 +55,23 @@ class PunktumFTP:
         if remoteFilesSizes[remoteFiles.index(filename)] > offset:
             try:
                 count = 0
+
                 def writeLokalFile(data):
                     nonlocal count
                     file = open(filename, 'ab')
                     file.write(data)
                     count += len(data)
                     # print("written %s" % ("{:,}".format(count)))
+
                 self.pf.setCompleteInDB(filename, False)
                 f.retrbinary('RETR %s' % filename, writeLokalFile, rest=offset)
                 self.pf.setCompleteInDB(filename, True)
-                self.pf.logger.info('file %s downloaded successfully' % (filename))
+                self.pf.logger.info('file %s downloaded successfully' % filename)
                 rval = True
             except ftplib.all_errors as e:
                 self.pf.logger.error("ftp error %s" % e)
         else:
-            self.pf.logger.info("file already downloaded %s" % (filename))
+            self.pf.logger.info("file already downloaded %s" % filename)
             self.pf.setCompleteInDB(filename, True)
         f.quit()
         return rval
@@ -88,11 +91,11 @@ class PunktumFTP:
                             statinfo = os.stat(file_name)
                             existingFileSize = statinfo.st_size
                         # print("lokal %s %d" % (file_name, existingFileSize))
-                        self.DownloadFileFromFTPServer("62.67.13.9", "punktum", "punktum", ".", file_name, existingFileSize)
+                        self.DownloadFileFromFTPServer(secrets.ftpserver, secrets.username, secrets.password,
+                                                       '.', file_name, existingFileSize)
             except Exception as e:
                 self.pf.logger.error("fatal error %s" % e)
             time.sleep(881 + random.randrange(180))
-        self.pf.logger.critical("-----upps ftp done-----")
 
 
 pftp = PunktumFTP()
