@@ -22,10 +22,10 @@ class PunktumFiles:
 
     def getFilesNeeded(self) -> dict:
         filesNeeded = {}
-        offset = [1, 2, 0]
+        offset = [0, 1, -1]
         start = 0
         for _ in self.relativeTage:
-            date = datetime.datetime.today() - datetime.timedelta(days=-offset[start] + 1) - datetime.timedelta(hours=17)
+            date = datetime.datetime.today() - datetime.timedelta(days=-offset[start]) - datetime.timedelta(hours=17)
             # date = datetime.now() - datetime.timedelta(days=1)
             wt = date.weekday()
             t = date.day

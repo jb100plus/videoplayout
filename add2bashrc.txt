@@ -2,7 +2,7 @@
 #  cat /home/pi/punktum.log
 #if
 
-if [[ $(tty) == *"tty1" ]]
+if [[ $(tty) == *"tty1" ]]; then
   /home/pi/start
 else
   cat /home/pi/punktum.log
