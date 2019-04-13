@@ -1,0 +1,7 @@
+if [ "$SSH_CONNECTION" ]; then
+  cat /home/pi/punktum.log
+else
+  /home/pi/start
+fi
+
+

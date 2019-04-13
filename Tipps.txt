@@ -64,4 +64,3 @@ sudo dd if=/dev/mmcblk0 of=pi.img bs=10M
 sudo dd of=pi.img if=/dev/mmcblk0 bs=10M
 sync
 
-
