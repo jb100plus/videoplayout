@@ -1,7 +1,9 @@
-if [ "$SSH_CONNECTION" ]; then
-  cat /home/pi/punktum.log
-else
+#if [ "$SSH_CONNECTION" ]; then
+#  cat /home/pi/punktum.log
+#if
+
+if [[ $(tty) == *"tty1" ]]
   /home/pi/start
+else
+  cat /home/pi/punktum.log
 fi
-
-

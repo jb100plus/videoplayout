@@ -1,7 +1,9 @@
 #!/bin/bash
+echo "punktum playout, please wait"
 sleep 5
 cd /home/pi
 sleep 10
 ./PunktumFTP.py &
 sleep 5
-./PunktumPlayerOMX.py
+clear
+./PunktumPlayerOMX.py &>/dev/null
