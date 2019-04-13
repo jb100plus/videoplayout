@@ -9,7 +9,7 @@ from logging.handlers import RotatingFileHandler
 
 class PunktumFiles:
     wochentage = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
-    relativeTage = ["gestern", "heute", "morgen"]
+    relativeTage = ["heute", "morgen", "gestern"]
 
     def __init__(self):
         self.logger = logging.getLogger()
@@ -22,9 +22,10 @@ class PunktumFiles:
 
     def getFilesNeeded(self) -> dict:
         filesNeeded = {}
+        offset = [1, 2, 0]
         start = 0
         for _ in self.relativeTage:
-            date = datetime.datetime.today() - datetime.timedelta(days=-start + 1) - datetime.timedelta(hours=17)
+            date = datetime.datetime.today() - datetime.timedelta(days=-offset[start] + 1) - datetime.timedelta(hours=17)
             # date = datetime.now() - datetime.timedelta(days=1)
             wt = date.weekday()
             t = date.day
@@ -51,7 +52,7 @@ class PunktumFiles:
 
     def deleteOldFiles(self):
         filesToDelete = []
-        for t in range(-30, -1):
+        for t in range(-180, -1):
             date = datetime.datetime.today() - datetime.timedelta(days=-t)
             # date = datetime.now() - datetime.timedelta(days=1)
             wt = date.weekday()
