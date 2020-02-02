@@ -3,7 +3,7 @@
 #if
 
 if [[ $(tty) == *"tty1" ]]; then
-  /home/pi/start
+  /home/pi/videoplayout/start
 else
-  cat /home/pi/punktum.log
+  cat /home/pi/videoplayout/punktum.log
 fi
