@@ -47,14 +47,22 @@ class PunktumFiles:
                 file_removed = True
             except OSError:
                 pass
-            conn = sqlite3.connect('fwsps.db')
-            c = conn.cursor()
-            fn = (filename,)
-            dbentry_deleted = bool(c.execute("DELETE FROM clips WHERE filename = ?", fn).rowcount)
-            conn.commit()
-            conn.close()
+            dbentry_deleted = self.deleteFileEntryFromDB(filename)
             if file_removed or dbentry_deleted:
                 self.logger.info('deleted clip {0} {1} {2}'.format(filename, file_removed, dbentry_deleted))
+
+
+    def deleteFileEntryFromDB(self, filename):
+        conn = sqlite3.connect('fwsps.db')
+        c = conn.cursor()
+        fn = (filename,)
+        dbentry_deleted = bool(c.execute("DELETE FROM clips WHERE filename = ?", fn).rowcount)
+        conn.commit()
+        conn.close()
+        if dbentry_deleted:
+            self.logger.info('dbentry_deleted  clip {0}'.format(filename))
+        return dbentry_deleted
+
 
     def deleteOldFiles(self):
         filesToDelete = []
@@ -110,4 +118,7 @@ class PunktumFiles:
             ic = row[0]
             rval = (ic.upper() == "TRUE")
             break
+        if not os.path.exists(filename):
+            self.deleteFile(filename)
+            rval = False
         return rval
