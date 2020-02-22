@@ -19,6 +19,7 @@ class PunktumFiles:
         self.formatter = logging.Formatter('%(asctime)s %(levelname)-6s %(message)s')
         self.handler.setFormatter(self.formatter)
         self.logger.addHandler(self.handler)
+        self.createDB()
 
     def getFilesNeeded(self) -> dict:
         filesNeeded = {}
@@ -40,15 +41,20 @@ class PunktumFiles:
         dictFn = self.getFilesNeeded()
         fna = [dictFn["gestern"], dictFn["heute"], dictFn["morgen"]]
         if not filename in fna:
-            if os.path.exists(filename):
+            file_removed = False
+            try:
                 os.remove(filename)
-                conn = sqlite3.connect('fwsps.db')
-                c = conn.cursor()
-                fn = (filename,)
-                c.execute("DELETE FROM clips WHERE filename = ?", fn)
-                conn.commit()
-                conn.close()
-                self.logger.info('deleted clip %s' % filename)
+                file_removed = True
+            except OSError:
+                pass
+            conn = sqlite3.connect('fwsps.db')
+            c = conn.cursor()
+            fn = (filename,)
+            dbentry_deleted = bool(c.execute("DELETE FROM clips WHERE filename = ?", fn).rowcount)
+            conn.commit()
+            conn.close()
+            if file_removed or dbentry_deleted:
+                self.logger.info('deleted clip {0} {1} {2}'.format(filename, file_removed, dbentry_deleted))
 
     def deleteOldFiles(self):
         filesToDelete = []
