@@ -13,10 +13,11 @@ class PunktumFiles:
 
     def __init__(self):
         self.logger = logging.getLogger()
-        self.logger.setLevel(logging.INFO)
+        self.logger.setLevel(logging.DEBUG)
         self.handler = logging.handlers.RotatingFileHandler("punktum.log", 'a', maxBytes=32 * 1024,
                                                             backupCount=1)
-        self.formatter = logging.Formatter('%(asctime)s %(levelname)-6s %(message)s')
+        #self.formatter = logging.Formatter('%(asctime)s %(levelname)-6s %(message)s')
+        self.formatter = logging.Formatter('%(asctime)s %(levelname)-7s %(filename)s %(funcName)s %(lineno)d:  %(message)s')
         self.handler.setFormatter(self.formatter)
         self.logger.addHandler(self.handler)
         self.createDB()
@@ -73,7 +74,7 @@ class PunktumFiles:
             t = date.day
             m = date.month
             fn = ("%02d%02d%s.mp4" % (t, m, self.wochentage[wt]))
-            self.logger.debug('try to deleted clip %s' % fn)
+            self.logger.debug('try to delete clip %s' % fn)
             self.deleteFile(fn)
         return filesToDelete
 

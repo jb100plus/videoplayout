@@ -9,6 +9,8 @@ from PunktumPlayer import PunktumPlayer
 class PunktumPlayerVLC(PunktumPlayer):
     def __init__(self):
         super().__init__()
+        self.lastpos = 0
+        self.currpos = 0
         self.killstring = "killall -9 vlc"
 
     def play(self, filename):
@@ -47,31 +49,38 @@ class PunktumPlayerVLC(PunktumPlayer):
 
     def checkPlayerStatus(self):
         rval = False
-        HOST = "127.0.0.1"
-        PORT = 4444
-        tn = telnetlib.Telnet(HOST, PORT)
-        data = tn.read_until(">".encode('ascii'), 1)
-        data = tn.read_eager()
-        while True:
-            data = tn.read_eager()
-            if len(data) == 0:
-                break
-        tn.write("status\n".encode('ascii'))
-        data = tn.read_until(">".encode('ascii'), 1)
-        datastr = str(data, 'utf-8')
-        self.pf.logger.debug(datastr)
-        # sudo apt install wmctrl
-        if 'playing' in datastr:
-            process = subprocess.Popen(['wmctrl', '-l'], stdout=subprocess.PIPE)
-            out = process.stdout.read()
-            self.pf.logger.debug(out)
-            # read liefert bytes deshalb casten
-            if b'VLC media player' in out:
-                rval = True
-        tn.close()
+        try:
+            HOST = "127.0.0.1"
+            PORT = 4444
+            tn = telnetlib.Telnet(HOST, PORT)
+            data = tn.read_until(">".encode('ascii'), 1)
+            while True:
+                data = tn.read_eager()
+                if len(data) == 0:
+                    break
+            tn.write("get_time\n".encode('ascii'))
+            data = tn.read_until(">".encode('ascii'), 1)
+            datastr = str(data, 'utf-8')
+            self.currpos = int(datastr.split('\r')[0])
+            tn.close()
+        except Exception as ex:
+            self.pf.logger.error("checkPlayerStatus exception: ".format(ex))
+        self.pf.logger.debug("gettime currpos: {0} lastpos: {1}".format(self.currpos, self.lastpos))
+        if self.currpos != self.lastpos:
+            rval = True
+        self.lastpos = self.currpos
+        # check if windows is not closed --> for this: sudo apt install wmctrl
+        process = subprocess.Popen(['wmctrl', '-l'], stdout=subprocess.PIPE)
+        out = process.stdout.read()
+        self.pf.logger.debug(out)
+        # read liefert bytes deshalb casten
+        if not b'VLC media player' in out:
+            rval = False
         self.pf.logger.debug("checkPlayerStatus {} ".format(str(rval)))
         return rval
 
 
 ppv = PunktumPlayerVLC()
 ppv.run()
+
+
