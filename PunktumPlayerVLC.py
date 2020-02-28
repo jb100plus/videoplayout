@@ -18,9 +18,12 @@ class PunktumPlayerVLC(PunktumPlayer):
                 '--no-video-deco', '--fullscreen', '--deinterlace', '1', '--repeat', filename, '&']
         self.playerproc = subprocess.Popen(args, stdout=subprocess.PIPE)
         # verwendet man --start - time = % s, dann fängt der Clip immer wieder an dieser Stelle an
-        time.sleep(2)  # time to start the telnet server
-        self.vlcSeek(self.offset + 2)
+        pause = 2
+        time.sleep(pause)  # time to start the telnet server
+        self.vlcSeek(self.offset + pause)
+        self.setFullscreen()
         super().play(filename)
+
 
     def vlcSeek(self, sec):
         HOST = "127.0.0.1"
@@ -30,16 +33,13 @@ class PunktumPlayerVLC(PunktumPlayer):
         data = tn.read_eager()
         while True:
             data = tn.read_eager()
-            print(str(data, 'utf-8'))
             if len(data) == 0:
                 break
         seekstr = "seek " + str(sec) + "\n"
         tn.write(seekstr.encode('ascii'))
         data = tn.read_until(">".encode('ascii'), 1)
-        print(str(data, 'utf-8'))
         while True:
             data = tn.read_eager()
-            print(str(data, 'utf-8'))
             if len(data) == 0:
                 break
         tn.close()
@@ -47,7 +47,9 @@ class PunktumPlayerVLC(PunktumPlayer):
         self.offset = 0
         self.pf.logger.info("seek for clip %d" % sec)
 
+
     def checkPlayerStatus(self):
+        self.pf.logger.debug('checkPlayerStatus')
         rval = False
         try:
             HOST = "127.0.0.1"
@@ -76,8 +78,31 @@ class PunktumPlayerVLC(PunktumPlayer):
         # read liefert bytes deshalb casten
         if not b'VLC media player' in out:
             rval = False
-        self.pf.logger.debug("checkPlayerStatus {} ".format(str(rval)))
+        self.pf.logger.debug("wmctrl out: {} ".format(str(rval)))
+        self.setFullscreen()
         return rval
+
+    def setFullscreen(self):
+        self.pf.logger.debug('setFullscreen')
+        processfs = subprocess.Popen(['xprop', '-name', 'VLC media player'], stdout=subprocess.PIPE)
+        out = processfs.stdout.read()
+        if not b'_NET_WM_STATE_FULLSCREEN' in out:
+            self.pf.logger.info(out)
+            try:
+                HOST = "127.0.0.1"
+                PORT = 4444
+                tn = telnetlib.Telnet(HOST, PORT)
+                data = tn.read_until(">".encode('ascii'), 1)
+                while True:
+                    data = tn.read_eager()
+                    if len(data) == 0:
+                        break
+                tn.write("f\n".encode('ascii'))
+                data = tn.read_eager()
+                tn.close()
+                self.pf.logger.debug("setFullscreen {} ".format(str(data)))
+            except Exception as ex:
+                self.pf.logger.error("setFullscreen exception: ".format(ex))
 
 
 ppv = PunktumPlayerVLC()
