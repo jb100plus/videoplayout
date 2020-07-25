@@ -13,7 +13,7 @@ class PunktumFiles:
 
     def __init__(self):
         self.logger = logging.getLogger()
-        self.logger.setLevel(logging.DEBUG)
+        self.logger.setLevel(logging.INFO)
         self.handler = logging.handlers.RotatingFileHandler("punktum.log", 'a', maxBytes=32 * 1024,
                                                             backupCount=1)
         #self.formatter = logging.Formatter('%(asctime)s %(levelname)-6s %(message)s')
