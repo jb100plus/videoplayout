@@ -27,8 +27,6 @@ cat /var/log/syslog
 Audio
 Einstellungen für Lautstärke->Einstellungen->Profil
 
-besser statt die nächsten Zeilen: ufw benutzen
-
 sudo iptables -A INPUT -i tun0 -p tcp --dport 22 -j ACCEPT # allow SSH over openvpn
 sudo iptables -A INPUT -p tcp --dport 22 -j DROP # deny all other
 established zulassen ftp!!!
@@ -60,11 +58,9 @@ else
   /home/pi/start
 fi
 
+
 lsblk
 sudo dd if=/dev/mmcblk0 of=pi.img bs=10M
 sudo dd of=pi.img if=/dev/mmcblk0 bs=10M
 sync
 
-Linux PC:
-Probleme mir Intel HW Decodierung des VLC -> falsches Seitenverhältnis -> HW Codec deaktivieren
-für die Überwachnung des VLC Status: sudo apt install wmctrl

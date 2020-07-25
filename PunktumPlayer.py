@@ -23,7 +23,6 @@ class PunktumPlayer:
     def run(self):
         currentFile = ""
         while True:
-            dosleep = True
             try:
                 self.pf.logger.debug("do loop")
                 dictFn = self.pf.getFilesNeeded()
@@ -49,10 +48,6 @@ class PunktumPlayer:
                         self.play(currentFile)
                 if not self.checkPlayerStatus():
                     currentFile = ""
-                    dosleep = False
             except Exception as e:
-                self.pf.logger.error("do loop %s" % e)
-            if dosleep:            
-                time.sleep(60 - datetime.datetime.now().second)
-
-
+                self.pf.logger.error("fatal error %s" % e)
+            time.sleep(60 - datetime.datetime.now().second)

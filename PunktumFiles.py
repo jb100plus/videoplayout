@@ -16,11 +16,9 @@ class PunktumFiles:
         self.logger.setLevel(logging.INFO)
         self.handler = logging.handlers.RotatingFileHandler("punktum.log", 'a', maxBytes=32 * 1024,
                                                             backupCount=1)
-        #self.formatter = logging.Formatter('%(asctime)s %(levelname)-6s %(message)s')
-        self.formatter = logging.Formatter('%(asctime)s %(levelname)-7s %(filename)s %(funcName)s %(lineno)d:  %(message)s')
+        self.formatter = logging.Formatter('%(asctime)s %(levelname)-6s %(message)s')
         self.handler.setFormatter(self.formatter)
         self.logger.addHandler(self.handler)
-        self.createDB()
 
     def getFilesNeeded(self) -> dict:
         filesNeeded = {}
@@ -42,28 +40,15 @@ class PunktumFiles:
         dictFn = self.getFilesNeeded()
         fna = [dictFn["gestern"], dictFn["heute"], dictFn["morgen"]]
         if not filename in fna:
-            file_removed = False
-            try:
+            if os.path.exists(filename):
                 os.remove(filename)
-                file_removed = True
-            except OSError:
-                pass
-            dbentry_deleted = self.deleteFileEntryFromDB(filename)
-            if file_removed or dbentry_deleted:
-                self.logger.info('deleted clip {0} {1} {2}'.format(filename, file_removed, dbentry_deleted))
-
-
-    def deleteFileEntryFromDB(self, filename):
-        conn = sqlite3.connect('fwsps.db')
-        c = conn.cursor()
-        fn = (filename,)
-        dbentry_deleted = bool(c.execute("DELETE FROM clips WHERE filename = ?", fn).rowcount)
-        conn.commit()
-        conn.close()
-        if dbentry_deleted:
-            self.logger.info('dbentry_deleted  clip {0}'.format(filename))
-        return dbentry_deleted
-
+                conn = sqlite3.connect('fwsps.db')
+                c = conn.cursor()
+                fn = (filename,)
+                c.execute("DELETE FROM clips WHERE filename = ?", fn)
+                conn.commit()
+                conn.close()
+                self.logger.info('deleted clip %s' % filename)
 
     def deleteOldFiles(self):
         filesToDelete = []
@@ -74,7 +59,7 @@ class PunktumFiles:
             t = date.day
             m = date.month
             fn = ("%02d%02d%s.mp4" % (t, m, self.wochentage[wt]))
-            self.logger.debug('try to delete clip %s' % fn)
+            self.logger.debug('try to deleted clip %s' % fn)
             self.deleteFile(fn)
         return filesToDelete
 
@@ -119,7 +104,4 @@ class PunktumFiles:
             ic = row[0]
             rval = (ic.upper() == "TRUE")
             break
-        if not os.path.exists(filename):
-            self.deleteFile(filename)
-            rval = False
         return rval

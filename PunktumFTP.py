@@ -77,6 +77,7 @@ class PunktumFTP:
         return rval
 
     def run(self):
+        self.pf.createDB()
         random.seed(None)
         while True:
             try:
