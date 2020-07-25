@@ -48,7 +48,7 @@ class PunktumFiles:
                 c.execute("DELETE FROM clips WHERE filename = ?", fn)
                 conn.commit()
                 conn.close()
-                self.logger.info('deleted clip %s' % filename)
+                self.logger.info('deleted clip in sb %s' % filename)
 
     def deleteOldFiles(self):
         filesToDelete = []
@@ -59,7 +59,7 @@ class PunktumFiles:
             t = date.day
             m = date.month
             fn = ("%02d%02d%s.mp4" % (t, m, self.wochentage[wt]))
-            self.logger.debug('try to deleted clip %s' % fn)
+            self.logger.debug('try to deleted clip in db %s' % fn)
             self.deleteFile(fn)
         return filesToDelete
 
@@ -104,4 +104,10 @@ class PunktumFiles:
             ic = row[0]
             rval = (ic.upper() == "TRUE")
             break
+        if rval:
+            physical_file_exists = os.path.isfile(filename)
+            if not physical_file_exists:
+                self.deleteFile(filename)
+                rval = False
+                self.logger.info('physical file not exists %s' % filename)
         return rval

@@ -30,7 +30,6 @@ class PunktumPlayer:
                 if not self.pf.isFileAvailable(fn):
                     fn = dictFn["gestern"]
                     self.pf.logger.info("clip %s not available trying %s" % (dictFn["heute"], dictFn["gestern"]))
-                file_name = fn
                 ct = datetime.datetime.now()
                 # restart every hour, otherwise the clip start at the offset from the first start
                 # restart only if there was a significant offset (>10)
