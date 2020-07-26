@@ -5,13 +5,19 @@ import telnetlib
 import subprocess
 from PunktumPlayer import PunktumPlayer
 
-
+'''
+under Linux there can be problems with hardware acceleration, in this case disable hardware acceleration
+in then vlc preferences: 
+Tools → Preferences → Input & Codecs → Codecs → Hardware-accelerated decoding. To disable, select Disable.
+https://wiki.videolan.org/VLC_GPU_Decoding/
+'''
 class PunktumPlayerVLC(PunktumPlayer):
     def __init__(self):
         super().__init__()
         self.killstring = "killall -9 vlc"
 
     def play(self, filename):
+        #if self.playerproc == None:
         args = ['cvlc', '-I', 'rc', '--rc-host=localhost:4444', '--no-video-title-show', '--no-keyboard-events',
                 '--no-video-deco', '--fullscreen', '--deinterlace', '1', '--repeat', filename, '&']
         self.playerproc = subprocess.Popen(args, stdout=subprocess.PIPE)
@@ -41,9 +47,9 @@ class PunktumPlayerVLC(PunktumPlayer):
             if len(data) == 0:
                 break
         tn.close()
-        # avoid killing vlc
+        # avoid killing vlc (omx player can not seek)
         self.offset = 0
-        self.pf.logger.info("seek for clip %d" % sec)
+        self.pf.logger.info("seek for clip %d and set offset to 0 (avoid killing vlc)" % sec)
 
     def checkPlayerStatus(self):
         rval = False
@@ -61,6 +67,7 @@ class PunktumPlayerVLC(PunktumPlayer):
         datastr = str(data, 'utf-8')
         self.pf.logger.debug(datastr)
         # sudo apt install wmctrl
+        # check if a vlc output window is displayed
         if 'playing' in datastr:
             process = subprocess.Popen(['wmctrl', '-l'], stdout=subprocess.PIPE)
             out = process.stdout.read()
@@ -68,6 +75,8 @@ class PunktumPlayerVLC(PunktumPlayer):
             # read liefert bytes deshalb casten
             if b'VLC media player' in out:
                 rval = True
+                # be sure to run in fullscreen
+                tn.write("fullscreen on\n".encode('ascii'))
         tn.close()
         self.pf.logger.debug("checkPlayerStatus {} ".format(str(rval)))
         return rval

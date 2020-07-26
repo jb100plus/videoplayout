@@ -23,6 +23,7 @@ class PunktumPlayer:
     def run(self):
         currentFile = ""
         while True:
+            shouldsleep = True
             try:
                 self.pf.logger.debug("do loop")
                 dictFn = self.pf.getFilesNeeded()
@@ -38,6 +39,7 @@ class PunktumPlayer:
                         currentFile = ""
                 if fn != currentFile:
                     if self.pf.isFileAvailable(fn):
+                        self.pf.logger.debug('kill proc and play the new file {}'.format(fn))
                         os.system(self.killstring)
                         # time.sleep(1)
                         self.offset = ct.minute * 60 + ct.second
@@ -45,8 +47,11 @@ class PunktumPlayer:
                         # falls die Sendung nur 58 min lang ist
                         self.offset = min([58 * 60, self.offset])
                         self.play(currentFile)
+                # if somthing went wrong and the player isn't playing do a restart
                 if not self.checkPlayerStatus():
                     currentFile = ""
+                    shouldsleep = False
             except Exception as e:
                 self.pf.logger.error("fatal error %s" % e)
-            time.sleep(60 - datetime.datetime.now().second)
+            if shouldsleep:
+                time.sleep(60 - datetime.datetime.now().second)
